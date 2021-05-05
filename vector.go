@@ -93,5 +93,7 @@ func Add(vectors []Vector, simpleVectors []SimpleVector) Vector {
 	}
 
 	for _, sv := range simpleVectors {
+		// TODO: add all together, maybe recursively?
 	}
+	// TODO: return the result
 }
