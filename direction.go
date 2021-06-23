@@ -8,8 +8,21 @@ const (
 	South Direction = 'S'
 	West  Direction = 'W'
 
-	InvalidDirection Direction = '?'
+	InvalidDirection Direction = -1
+	unsetDirection   Direction = 0
 )
+
+func (d Direction) String() string {
+	return string(d)
+}
+
+func (d Direction) Valid() bool {
+	switch d {
+	case North, East, South, West:
+		return true
+	}
+	return false
+}
 
 // Opposite returns the direction opposite to the caller direction
 func (d Direction) Opposite() Direction {

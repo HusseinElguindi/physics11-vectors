@@ -25,25 +25,36 @@ func TestVecResolve(t *testing.T) {
 		{
 			// 20km [W 50deg N]
 			Vector: Vector{20, West, 50, North},
-			rX:     SimpleVector{15.32088886, West},
-			rY:     SimpleVector{12.85575219, North},
+			rY:     SimpleVector{15.32088886, West},
+			rX:     SimpleVector{12.85575219, North},
 		},
 		{
 			// 15km [W 80deg S]
 			Vector: Vector{15, West, 80, South},
-			rX:     SimpleVector{14.7721168, West},
-			rY:     SimpleVector{2.604722665, South},
+			rY:     SimpleVector{14.7721168, West},
+			rX:     SimpleVector{2.604722665, South},
+		},
+		{
+			Vector: Vector{330, North, 20, East},
+			rX:     SimpleVector{112.87, East},
+			rY:     SimpleVector{310.10, North},
+		},
+		{
+			Vector: Vector{240, West, 11, North},
+			rX:     SimpleVector{235.59, West},
+			rY:     SimpleVector{45.79, North},
 		},
 	}
 
 	for _, tc := range testCases {
-		percision := float64(3)
+		percision := float64(1)
 		rX, rY := tc.Vector.Resolve()
 
 		t.Logf("%+v %s\n", rX, string(rX.Direction))
 		t.Logf("%+v %s\n\n", rY, string(rY.Direction))
 
 		if roundN(rX.Mag, percision) != roundN(tc.rX.Mag, percision) || roundN(rY.Mag, percision) != roundN(tc.rY.Mag, percision) {
+			t.Logf("failed: %+v\n", tc.Vector)
 			t.Fail()
 		}
 	}
@@ -69,6 +80,51 @@ func TestSimpleVecAdd(t *testing.T) {
 		t.Logf("%+v %s %s\n", R, string(R.StartDirection), string(R.TowardDirection))
 
 		if roundN(R.Mag, percision) != roundN(tc.R.Mag, percision) {
+			t.Fail()
+		}
+	}
+}
+
+func TestAdd(t *testing.T) {
+	dX, dY := Vector{14.9, East, 69.9840404, North}.Resolve()
+
+	dX1, dY1 := Vector{15.2, East, 20, North}.Resolve()
+	dX2, dY2 := Vector{22.4, West, 40, North}.Resolve()
+	testCases := []struct {
+		simpleVectors []SimpleVector
+		R             Vector
+	}{
+		{
+			simpleVectors: []SimpleVector{
+				dX,
+				dY,
+			},
+			R: Vector{14.9, East, 69.9840404, North},
+		},
+		{
+			simpleVectors: []SimpleVector{dX1, dY1, dX2, dY2},
+			R:             Vector{19.8070, West, 81.6508, North},
+		},
+		{
+			simpleVectors: []SimpleVector{
+				{15, East},
+				{30.0267, South},
+			},
+			R: Vector{33.5649, East, 63.4553, South},
+		},
+	}
+
+	percision := float64(3)
+	eqFunc := func(a float64, b float64) bool {
+		return roundN(a, percision) == roundN(b, percision)
+	}
+	for _, tc := range testCases {
+		R := Add(false, tc.simpleVectors...)
+
+		t.Logf("Calculated: %+v %s %s\n", R, string(R.StartDirection), string(R.TowardDirection))
+		t.Logf("Answer: %+v %s %s\n", tc.R, string(tc.R.StartDirection), string(tc.R.TowardDirection))
+
+		if !tc.R.EqualFunc(R, eqFunc) {
 			t.Fail()
 		}
 	}
