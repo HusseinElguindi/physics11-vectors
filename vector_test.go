@@ -67,6 +67,16 @@ func TestSimpleVecAdd(t *testing.T) {
 		R   Vector
 	}{
 		{
+			sv1: SimpleVector{1, North},
+			sv2: SimpleVector{1, North},
+			R:   Vector{2, North, 0, North},
+		},
+		{
+			sv1: SimpleVector{1, North},
+			sv2: SimpleVector{2, South},
+			R:   Vector{1, South, 0, South},
+		},
+		{
 			sv1: SimpleVector{5.1, East},
 			sv2: SimpleVector{14, North},
 			R:   Vector{14.9, East, 69.9840404, North},
@@ -94,6 +104,13 @@ func TestAdd(t *testing.T) {
 		simpleVectors []SimpleVector
 		R             Vector
 	}{
+		{
+			simpleVectors: []SimpleVector{
+				{1, North},
+				{1, North},
+			},
+			R: Vector{2, North, 0, North},
+		},
 		{
 			simpleVectors: []SimpleVector{
 				dX,

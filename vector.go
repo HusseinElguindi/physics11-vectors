@@ -92,15 +92,27 @@ func (sv SimpleVector) ToVector() Vector {
 	}
 }
 
+func (v Vector) Simplify() (sv SimpleVector, ok bool) {
+	if v.RelativeAngle == 0 {
+		return SimpleVector{v.Mag, v.StartDirection}, true
+	}
+	return
+}
+
 // AddSimple adds 2 SimpleVectors together
 func (sv1 SimpleVector) Add(sv2 SimpleVector) Vector {
 	// Fast track if are on the same plane
-	if sv1.Direction.IsHorizontal() && sv2.Direction.IsHorizontal() || sv1.Direction.IsVertical() && sv2.Direction.IsVertical() {
+	if (sv1.Direction.IsHorizontal() && sv2.Direction.IsHorizontal()) || (sv1.Direction.IsVertical() && sv2.Direction.IsVertical()) {
 		if sv1.Direction != sv2.Direction {
 			sv2.Mag = -sv2.Mag
 		}
 		sv1.Mag += sv2.Mag
-		return sv2.ToVector()
+
+		if sv1.Mag < 0 {
+			sv1.Direction = sv1.Direction.Opposite()
+			sv1.Mag = -sv1.Mag
+		}
+		return sv1.ToVector()
 	}
 
 	// Resultant
@@ -144,6 +156,13 @@ func Add(inverseAngle bool, simpleVectors ...SimpleVector) Vector {
 			addend.Direction = addend.Direction.Opposite()
 			addend.Mag = -addend.Mag
 		}
+	}
+
+	switch unsetDirection {
+	case comp.Dx.Direction:
+		return comp.Dy.ToVector()
+	case comp.Dy.Direction:
+		return comp.Dy.ToVector()
 	}
 
 	if inverseAngle {

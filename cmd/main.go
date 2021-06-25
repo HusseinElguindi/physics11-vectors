@@ -43,24 +43,33 @@ Loop:
 		fmt.Print("\n\n")
 	}
 
-	// resolvedVecs := make([]vectors.SimpleVector, len(complexVecs)*2)
 	for _, cv := range complexVecs {
 		r1, r2 := cv.Resolve()
 		simpleVecs = append(simpleVecs, r1, r2)
 	}
-	fmt.Println(vectors.Add(false, simpleVecs...))
+	displayAddVec(false, simpleVecs...)
 
 InvertLoop:
 	for {
 		choice := readRune(scanner, "\nInvert resultant vector angle? (y/n) ")
 		switch choice {
 		case 'y', 'Y':
-			fmt.Println(vectors.Add(true, simpleVecs...))
+			displayAddVec(true, simpleVecs...)
 			break InvertLoop
 		case 'n', 'N':
 			break InvertLoop
 		default:
 			fmt.Print("Invalid choice.\n\n")
 		}
+	}
+}
+
+func displayAddVec(inverseAngle bool, simpleVectors ...vectors.SimpleVector) {
+	rv := vectors.Add(inverseAngle, simpleVectors...)
+	fmt.Println(rv)
+	if sv, ok := rv.Simplify(); ok {
+		fmt.Println(sv)
+	} else {
+		fmt.Println(rv)
 	}
 }
