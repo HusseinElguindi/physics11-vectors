@@ -66,7 +66,6 @@ InvertLoop:
 
 func displayAddVec(inverseAngle bool, simpleVectors ...vectors.SimpleVector) {
 	rv := vectors.Add(inverseAngle, simpleVectors...)
-	fmt.Println(rv)
 	if sv, ok := rv.Simplify(); ok {
 		fmt.Println(sv)
 	} else {

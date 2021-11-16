@@ -129,6 +129,15 @@ func TestAdd(t *testing.T) {
 			},
 			R: Vector{33.5649, East, 63.4553, South},
 		},
+
+		// TODO: MAKE THIS TEST PASS! (horizontal vectors in opposing directions don't add correctly?)
+		{
+			simpleVectors: []SimpleVector{
+				{100, East},
+				{50, West},
+			},
+			R: Vector{50, East, 0, East},
+		},
 	}
 
 	percision := float64(3)
