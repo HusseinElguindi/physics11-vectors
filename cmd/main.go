@@ -18,7 +18,7 @@ func main() {
 Loop:
 	for {
 		fmt.Println("1. Add simple vector (ex. 20.1 [W])")
-		fmt.Println("2. Add complex vector (ex. 20.1 [N 19.2 E]")
+		fmt.Println("2. Add complex vector (ex. 20.1 [N 19.2 E])")
 		if totalVecs >= 2 {
 			fmt.Printf("3. Calculate inputted vectors (%d)", totalVecs)
 		}
