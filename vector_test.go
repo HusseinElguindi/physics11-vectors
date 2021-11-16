@@ -81,6 +81,11 @@ func TestSimpleVecAdd(t *testing.T) {
 			sv2: SimpleVector{14, North},
 			R:   Vector{14.9, East, 69.9840404, North},
 		},
+		{
+			sv1: SimpleVector{10, East},
+			sv2: SimpleVector{20, West},
+			R:   Vector{10, West, 0, West},
+		},
 	}
 
 	for _, tc := range testCases {
@@ -129,8 +134,6 @@ func TestAdd(t *testing.T) {
 			},
 			R: Vector{33.5649, East, 63.4553, South},
 		},
-
-		// TODO: MAKE THIS TEST PASS! (horizontal vectors in opposing directions don't add correctly?)
 		{
 			simpleVectors: []SimpleVector{
 				{100, East},

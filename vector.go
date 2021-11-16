@@ -162,7 +162,7 @@ func Add(inverseAngle bool, simpleVectors ...SimpleVector) Vector {
 	case comp.Dx.Direction:
 		return comp.Dy.ToVector()
 	case comp.Dy.Direction:
-		return comp.Dy.ToVector()
+		return comp.Dx.ToVector()
 	}
 
 	if inverseAngle {
